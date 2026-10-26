@@ -426,6 +426,11 @@
       @media (max-width: 520px) {
         .contact-card .btn { width: 100%; }
       }
+      /* ---------- About Us ---------- */
+      .about-tagline { font-weight: 800; color: var(--ink); }
+      .about-body { max-width: 720px; margin: 0 auto; }
+      .about-body p { margin: 0 0 16px; font-size: 1rem; line-height: 1.7; color: var(--muted); }
+      .about-body p.about-tagline { text-align: center; color: var(--blue); font-size: 1.15rem; margin: 22px 0; }
       /* ---------- Footer ---------- */
       footer.site { background: var(--navy-deep); color: #aebadd; }
       .footer-in { padding: 38px 0 22px; }
@@ -559,6 +564,7 @@
           <a href="#portal">Portal</a>
           <a href="#journey">Countdown</a>
           <a href="#get-started">How to Start</a>
+          <a href="#about">About Us</a>
           <a href="#contact">Contact Us</a>
         </nav>
         <div class="header-actions">
@@ -574,6 +580,7 @@
         <a class="navlink" href="#portal">Portal</a>
         <a class="navlink" href="#journey">Countdown</a>
         <a class="navlink" href="#get-started">How to Start</a>
+        <a class="navlink" href="#about">About Us</a>
         <a class="navlink" href="#contact">Contact Us</a>
         <div class="row">
           <button class="btn btn-primary" data-open-auth="login">Sign In</button>
@@ -854,6 +861,24 @@
               <h3>Quick Portal Activation</h3>
               <p>Accounts are typically verified and activated within 20 to 30 minutes of sending receipt.</p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- About Us -->
+      <section class="block" id="about">
+        <div class="wrap">
+          <div class="reg-head">
+            <span class="reg-pill">ABOUT US</span>
+            <h2>About <span class="accent">MDCAT Prime</span></h2>
+            <p class="about-tagline">Your Trusted Partner in MDCAT Preparation</p>
+          </div>
+          <div class="about-body">
+            <p>MDCAT Prime is a dedicated online learning platform designed to help students prepare smarter for the MDCAT and move closer to their dream of becoming doctors.</p>
+            <p>Our mission is to make MDCAT preparation more accessible, organized, and effective for students across Pakistan. We provide a comprehensive learning experience through high-quality study resources, chapter-wise tests, practice MCQs, mock tests, past papers, and performance tracking.</p>
+            <p>At MDCAT Prime, we believe that success comes from consistent practice, strong concepts, and the right guidance. Our goal is to help every student build confidence, improve their preparation, and approach the MDCAT examination with confidence.</p>
+            <p class="about-tagline">Prepare Smart. Practice More. Aim Higher.</p>
+            <p>Your journey towards a medical career starts with MDCAT Prime.</p>
           </div>
         </div>
       </section>
@@ -1213,7 +1238,7 @@
         var INFO = {
           about: {
             title: 'About MDCAT Prime',
-            body: '<p>MDCAT Prime is Pakistan&rsquo;s dedicated platform for MDCAT 2027 preparation. It brings together 20,000+ MCQs, past papers, high-yield PDF notes and exam-style mock tests in one place — organised by subject and chapter for Biology, Chemistry, Physics, English and Logical Reasoning.</p><p>With chapter-wise practice, timed mock tests and instant results with review, MDCAT Prime helps you find your weak areas early and turn them into strengths before test day.</p>'
+            body: '<p>MDCAT Prime is a dedicated online learning platform designed to help students prepare smarter for the MDCAT and move closer to their dream of becoming doctors.</p><p>Our mission is to make MDCAT preparation more accessible, organized, and effective for students across Pakistan. We provide a comprehensive learning experience through high-quality study resources, chapter-wise tests, practice MCQs, mock tests, past papers, and performance tracking.</p><p>At MDCAT Prime, we believe that success comes from consistent practice, strong concepts, and the right guidance. Our goal is to help every student build confidence, improve their preparation, and approach the MDCAT examination with confidence.</p><p><strong>Prepare Smart. Practice More. Aim Higher.</strong></p><p>Your journey towards a medical career starts with MDCAT Prime.</p>'
           },
           privacy: {
             title: 'Privacy Policy',
