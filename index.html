@@ -1022,6 +1022,72 @@
         });
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
 
+        /* ---- Real accounts via Firebase Firestore (project mdcat-prime) ----
+           Same pattern as MDCAT Zone: no Auth SDK. A user document is stored
+           in the 'users' collection, id = SHA-256 of the lowercase email,
+           with fullName, email, passwordHash (SHA-256 of the password) and
+           createdAt. Sign-in verifies the stored hash. Session is kept in
+           localStorage so the header shows the signed-in student. */
+        var FB_BASE = 'https://firestore.googleapis.com/v1/projects/mdcat-prime/databases/(default)/documents';
+        var FB_KEY = 'AIzaSyB3UsrZsPUyXi0hmIXEzJU_hd6qZ52bgVQ';
+        var SESSION_KEY = 'mdcatprime-session';
+
+        function sha256Hex(text) {
+          var data = new TextEncoder().encode(text);
+          return crypto.subtle.digest('SHA-256', data).then(function (buf) {
+            var bytes = new Uint8Array(buf);
+            var hex = '';
+            for (var i = 0; i < bytes.length; i++) {
+              hex += (bytes[i] < 16 ? '0' : '') + bytes[i].toString(16);
+            }
+            return hex;
+          });
+        }
+        function userDocId(email) { return sha256Hex(email.trim().toLowerCase()); }
+        function getSession() {
+          try { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch (e) { return null; }
+        }
+        function setSession(name, email) {
+          try { localStorage.setItem(SESSION_KEY, JSON.stringify({ name: name, email: email })); } catch (e) {}
+        }
+        function clearSession() { try { localStorage.removeItem(SESSION_KEY); } catch (e) {} }
+
+        function applyHeaderAuth() {
+          var session = getSession();
+          var containers = [document.querySelector('.header-actions'), document.querySelector('.mobile-menu .row')];
+          containers.forEach(function (box) {
+            if (!box) return;
+            var chip = box.querySelector('.auth-chip');
+            if (session) {
+              box.querySelectorAll('[data-open-auth]').forEach(function (b) { b.style.display = 'none'; });
+              if (!chip) {
+                chip = document.createElement('span');
+                chip.className = 'auth-chip';
+                chip.style.cssText = 'font-weight:800;font-size:0.95rem;color:var(--ink);display:inline-flex;align-items:center;gap:10px;';
+                var nm = document.createElement('span');
+                nm.textContent = 'Hi, ' + session.name.split(' ')[0];
+                var out = document.createElement('button');
+                out.className = 'btn-login';
+                out.textContent = 'Log out';
+                out.addEventListener('click', function () {
+                  clearSession();
+                  applyHeaderAuth();
+                });
+                chip.appendChild(nm);
+                chip.appendChild(out);
+                box.appendChild(chip);
+              } else {
+                chip.style.display = 'inline-flex';
+                chip.firstChild.textContent = 'Hi, ' + session.name.split(' ')[0];
+              }
+            } else {
+              box.querySelectorAll('[data-open-auth]').forEach(function (b) { b.style.display = ''; });
+              if (chip) chip.style.display = 'none';
+            }
+          });
+        }
+        applyHeaderAuth();
+
         authForm.addEventListener('submit', function (e) {
           e.preventDefault();
           var name = document.getElementById('fName').value.trim();
@@ -1034,9 +1100,74 @@
           if (mode === 'signup' && name.length < 2) { showNote('err', 'Please enter your full name.'); return; }
           if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showNote('err', 'Please enter a valid email address.'); return; }
           if (pass.length < 6) { showNote('err', 'Your password must be at least 6 characters.'); return; }
-          showNote('ok', mode === 'signup'
-            ? 'Welcome to MDCAT Prime, ' + name.split(' ')[0] + '! This landing page is a preview — accounts open with the full MDCAT Prime platform.'
-            : 'Welcome back! This landing page is a preview — student logins open with the full MDCAT Prime platform.');
+          authSubmit.disabled = true;
+          var oldText = authSubmit.textContent;
+          authSubmit.textContent = 'Please wait...';
+          function done() { authSubmit.disabled = false; authSubmit.textContent = oldText; }
+          userDocId(email).then(function (docId) {
+            var url = FB_BASE + '/users/' + docId + '?key=' + FB_KEY;
+            return fetch(url).then(function (res) {
+              if (res.status === 404) return null;
+              if (!res.ok) throw new Error('read-failed');
+              return res.json();
+            }).then(function (doc) {
+              if (mode === 'signup') {
+                if (doc) {
+                  showNote('err', 'An account with this email already exists. Please log in instead.');
+                  done();
+                  setMode('login');
+                  return null;
+                }
+                return sha256Hex(pass).then(function (hash) {
+                  return fetch(FB_BASE + '/users?documentId=' + docId + '&key=' + FB_KEY, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ fields: {
+                      fullName: { stringValue: name },
+                      email: { stringValue: email },
+                      passwordHash: { stringValue: hash },
+                      createdAt: { timestampValue: new Date().toISOString() }
+                    }})
+                  }).then(function (res) {
+                    if (res.status === 409) {
+                      showNote('err', 'An account with this email already exists. Please log in instead.');
+                      done();
+                      setMode('login');
+                      return null;
+                    }
+                    if (!res.ok) throw new Error('create-failed');
+                    setSession(name, email);
+                    applyHeaderAuth();
+                    showNote('ok', 'Welcome to MDCAT Prime, ' + name.split(' ')[0] + '! Your account has been created and you are logged in.');
+                    setTimeout(closeAll, 1600);
+                    done();
+                    return null;
+                  });
+                });
+              } else {
+                if (!doc) {
+                  showNote('err', 'No account found for this email. Please create an account first.');
+                  done();
+                  setMode('signup');
+                  return null;
+                }
+                var stored = doc.fields && doc.fields.passwordHash && doc.fields.passwordHash.stringValue;
+                var fullName = (doc.fields && doc.fields.fullName && doc.fields.fullName.stringValue) || email.split('@')[0];
+                return sha256Hex(pass).then(function (hash) {
+                  if (hash !== stored) { showNote('err', 'Incorrect password. Please try again.'); done(); return null; }
+                  setSession(fullName, email);
+                  applyHeaderAuth();
+                  showNote('ok', 'Welcome back, ' + fullName.split(' ')[0] + '! You are logged in.');
+                  setTimeout(closeAll, 1600);
+                  done();
+                  return null;
+                });
+              }
+            });
+          }).catch(function () {
+            showNote('err', 'Could not reach the server. Please check your connection and try again.');
+            done();
+          });
         });
 
         var INFO = {
