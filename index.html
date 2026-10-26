@@ -121,7 +121,7 @@
       .mobile-menu.open { display: block; }
       .mobile-menu a.navlink {
         display: block; padding: 12px 4px; color: var(--ink);
-        font-weight: 700; text-decoration: none; border-bottom: 1px solid var(--line);
+        font-weight: 700; text-decoration: none; text-align: center;
       }
       .mobile-menu .row { display: flex; gap: 10px; margin-top: 16px; }
       .mobile-menu .row .btn { flex: 1; }
@@ -408,6 +408,24 @@
       @media (max-width: 420px) {
         .activate-box { flex-direction: column; gap: 12px; }
       }
+      /* ---------- Contact Us ---------- */
+      .contact-card {
+        background: #fbfcfe; border: 1px solid var(--line); border-radius: 22px;
+        padding: 26px 24px; box-shadow: 0 4px 14px rgba(19, 36, 92, 0.04);
+        max-width: 680px; margin: 0 auto;
+        display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+      }
+      .contact-icon {
+        flex: none; width: 58px; height: 58px; border-radius: 16px;
+        background: #dcf7e8; color: #0a7a3f; display: grid; place-items: center;
+      }
+      .contact-main { flex: 1 1 180px; }
+      .contact-main h3 { margin: 0 0 4px; color: var(--ink); font-size: 1.2rem; font-weight: 800; }
+      .contact-main p { margin: 0; font-size: 1.15rem; font-weight: 800; color: var(--ink); }
+      .contact-card .btn { white-space: nowrap; }
+      @media (max-width: 520px) {
+        .contact-card .btn { width: 100%; }
+      }
       /* ---------- Footer ---------- */
       footer.site { background: var(--navy-deep); color: #aebadd; }
       .footer-in { padding: 38px 0 22px; }
@@ -541,6 +559,7 @@
           <a href="#portal">Portal</a>
           <a href="#journey">Countdown</a>
           <a href="#get-started">How to Start</a>
+          <a href="#contact">Contact Us</a>
         </nav>
         <div class="header-actions">
           <button class="btn-login" data-open-auth="login">Log in</button>
@@ -555,9 +574,9 @@
         <a class="navlink" href="#portal">Portal</a>
         <a class="navlink" href="#journey">Countdown</a>
         <a class="navlink" href="#get-started">How to Start</a>
+        <a class="navlink" href="#contact">Contact Us</a>
         <div class="row">
-          <button class="btn btn-ghost" data-open-auth="login">Log in</button>
-          <button class="btn btn-primary" data-open-auth="signup">Create Account</button>
+          <button class="btn btn-primary" data-open-auth="login">Sign In</button>
         </div>
       </div>
     </header>
@@ -835,6 +854,27 @@
               <h3>Quick Portal Activation</h3>
               <p>Accounts are typically verified and activated within 20 to 30 minutes of sending receipt.</p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact Us -->
+      <section class="block" id="contact">
+        <div class="wrap">
+          <div class="reg-head">
+            <span class="reg-pill">CONTACT US</span>
+            <h2>Contact <span class="accent">Us</span></h2>
+            <p>Questions about your account, payment, or activation? Message us on WhatsApp and we will get back to you.</p>
+          </div>
+          <div class="contact-card">
+            <span class="contact-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.6 0-3.1-.4-4.4-1.2L3 20l1.3-4.9A8.5 8.5 0 1 1 21 11.5z"/></svg>
+            </span>
+            <div class="contact-main">
+              <h3>WhatsApp</h3>
+              <p>03343759613</p>
+            </div>
+            <a class="btn btn-primary" href="https://wa.me/923343759613">Chat on WhatsApp</a>
           </div>
         </div>
       </section>
