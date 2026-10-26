@@ -431,6 +431,40 @@
       .about-body { max-width: 720px; margin: 0 auto; }
       .about-body p { margin: 0 0 16px; font-size: 1rem; line-height: 1.7; color: var(--muted); }
       .about-body p.about-tagline { text-align: center; color: var(--blue); font-size: 1.15rem; margin: 22px 0; }
+      /* ---------- Contact info + message form (used by contact.html) ---------- */
+      .info-card {
+        background: #fbfcfe; border: 1px solid var(--line); border-radius: 22px;
+        padding: 24px; box-shadow: 0 4px 14px rgba(19, 36, 92, 0.04);
+        max-width: 680px; margin: 0 auto;
+      }
+      .info-card h3 { margin: 0 0 8px; color: var(--ink); font-size: 1.2rem; font-weight: 800; }
+      .info-row { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--line); }
+      .info-row:last-child { border-bottom: 0; padding-bottom: 0; }
+      .info-ic {
+        flex: none; width: 46px; height: 46px; border-radius: 13px;
+        background: #eef4ff; color: var(--blue); display: grid; place-items: center;
+      }
+      .info-row .lbl { font-size: 0.85rem; color: var(--muted); font-weight: 700; margin-bottom: 2px; }
+      .info-row .val { font-size: 1.05rem; font-weight: 800; color: var(--ink); }
+      .info-row .val a { color: var(--ink); text-decoration: none; }
+      .info-card .btn { width: 100%; margin-top: 18px; }
+      .msg-card {
+        background: #fbfcfe; border: 1px solid var(--line); border-radius: 22px;
+        padding: 26px 24px; box-shadow: 0 4px 14px rgba(19, 36, 92, 0.04);
+        max-width: 680px; margin: 22px auto 0;
+      }
+      .msg-card h3 { margin: 0 0 18px; color: var(--ink); font-size: 1.2rem; font-weight: 800; }
+      .msg-field { margin-bottom: 16px; }
+      .msg-field label { display: block; font-weight: 700; font-size: 0.95rem; color: var(--ink); margin-bottom: 7px; }
+      .msg-field input, .msg-field textarea {
+        width: 100%; box-sizing: border-box; font: inherit; font-size: 1rem; color: var(--ink);
+        background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 13px 15px;
+      }
+      .msg-field textarea { min-height: 120px; resize: vertical; }
+      .msg-card .btn { width: 100%; }
+      .msg-note { margin-top: 14px; font-size: 0.95rem; }
+      .msg-note.err { color: #c00; }
+      .msg-note.ok { color: #0a7a3f; }
       /* ---------- Footer ---------- */
       footer.site { background: #fff; color: var(--muted); border-top: 1px solid var(--line); }
       .footer-in { padding: 38px 20px 22px; }
